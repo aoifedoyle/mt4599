@@ -1,0 +1,15 @@
+<html>
+    <script src="jstat.mine.js"></script>
+    <script src="HypothesisTest.js"></script>
+    <script src="HypothesisTest.css"></script>
+  <body>
+    Standard deviation: <input id="stddev-slider" type="number" min="0.2" max="2" step="0.1" value="1" onchange="draw()">
+    <span id="sigmax-value"></span>
+    Alpha: <input id="alpha-value" type="number" min="0.01" max="1" step="0.01" value="0.05" onchange="draw()">
+    <canvas id="canvas" width="600" height="400"></canvas>
+</body>
+<footer>
+  Alternative distribution: <input id="checkbox" type="checkbox" onclick="myfunction()">
+</footer>
+</html>
+
