@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Normal Distribution</title>
+	<script src="NormalDistribution.js"> </script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.3/jstat.js"></script> <!--jstat Stats functions-->
+</head>
+<body>
+<h3> The Normal Distribution</h3>
+	<div id="outerdiv">
+		<div id="topdiv">
+			<div id="canvasdiv">
+				<canvas id="canvas" ></canvas>		
+			</div>					
+		</div>	
+		<div>
+			<label> &mu; = </label>
+			<input type="number" id="myMean" value="100">
+			<button onclick="setMean()" id="setmeanbtn">Enter</button>
+			<label> &sigma; = </label>
+			<input type="number" id="mySD" value="15">
+			<button onclick="setSD()" id="setsdbtn" >Enter</button>
+			<label id="label1"> </label>
+			<br>
+			<label class="plabel" id="problabel1" > Problabel1</label>
+			<label class="plabel" id="problabel2" >Problabel2 </label>
+			<br>
+			<input type="checkbox" id="myCheck" onclick="showZ()"> Show Standard Normal</input>
+			
+			<label class = "plabel" id="stdnlabel"> Standard normal probs</label><br>
+			
+			<input type="checkbox" id="myshowa" onclick="showA()"> <label id="labela">Show &Phi;(a)</label></input>
+			<input type="checkbox" id="myshowb" onclick="showB()"> <label id="labelb">Show &Phi;(b)</label></input>
+		</div>
+	</div>
+</body>
+</html>
