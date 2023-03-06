@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Guess the Correlation Game</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script src="jstat.mine.js"></script>
+</head>
+<body>
+		<h1>Guess the Correlation Game</h1>
+	<p>Guess the correlation between the x and y values in the scatter plot. You have 3 lives. Good luck!</p>
+	<label for="x-values">Enter x-values:</label>
+	<input type="text" id="x-values"><br>
+	<label for="y-values">Enter y-values:</label>
+	<input type="text" id="y-values"><br>
+	<button onclick="generatePlot()">Generate Plot</button>
+	<div id="plot"></div>
+	<label for="guess">Guess the correlation:</label>
+	<input type="text" id="guess"><br>
+	<div id="output"></div>
+	<div id="score">Lives: 3 Score: 0</div>
+	<button onclick="checkGuess()">Check Guess</button>
+	<script src="Correlation.js"></script>
+</body>
+</html>
+
+
