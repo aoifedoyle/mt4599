@@ -221,7 +221,7 @@ class curve {
     print_population_inside_markers()
     {
       let t2 = this.calc_upper_cdf() - this.calc_lower_cdf();
-      let text = "T2= " + t2.toFixed(2);
+      let text = "Type 2= " + t2.toFixed(2);
       this.ctx.fillText(text, this.xMidpoint, this.canv_bottom - (this.canv_height/2));  
     }
   
