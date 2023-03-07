@@ -1,4 +1,9 @@
 # MT4599
-Run the html files to see the applets. 
-Each applet has an associated JavaScript file. 
-The file named "jstat.mine.js" was downloaded from the public JavaScript Statistical Library on github. 
+
+### The applets here were developed by Aoife Doyle for use in the MT1007 Statistics in Practice Module at the University of St Andrews. 
+
+#### Normal Distribution Applet. [click here](NormalDistribution.html)
+
+#### Hypothesis Testing Applet. [click here](HypothesisTest.html)
+
+#### Guess the Correlation Applet (Work in Progress). [click here](GuessTheCorrelation.html)
