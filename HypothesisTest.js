@@ -221,12 +221,12 @@ class curve {
     print_population_inside_markers()
     {
       let t2 = this.calc_upper_cdf() - this.calc_lower_cdf();
-      let text = "Type 2= " + t2.toFixed(2);
+      let text = "Type 2 error = " + t2.toFixed(2);
       this.ctx.fillText(text, this.xMidpoint, this.canv_bottom - (this.canv_height/2));  
     }
   
     /* >L
-    calculates and prints the pop'n outside the markers, called from >C
+    calculates and prints the populationn outside the markers, called from >C
     */
     print_population_outside_markers()
     {
@@ -299,7 +299,7 @@ class curve {
     */
     calc_x_alpha()
     {
-      this.x_alpha = jStat.normal.inv((1 - this.alpha / 2), 0 /*mean*/ , this.stddev);
+      this.x_alpha = jStat.normal.inv((1 - this.alpha / 2), 0 /*mean*/ , 1 /*stddev*/);
     }
   
     /* >R
