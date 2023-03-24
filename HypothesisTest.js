@@ -57,6 +57,7 @@ class curve {
   
     /* >C
     Draws the curve and all the other elements on the canvas.
+    This is the main calling point where some of the following code is called.
     */
     draw() 
     {
@@ -88,11 +89,14 @@ class curve {
         {
           this.print_population_outside_markers();
         }
+          
+        this.display_mean();
       }
     }
   
     /* >D
-    The code to generate and plot the Normal distribution curve. called from >C. 
+    The code to generate and plot the Normal distribution curve.
+    Called from >C. 
     */
     draw_curve()
     {
@@ -145,8 +149,9 @@ class curve {
     }
   
     /* >F
-    called from >C. creates two rectangles of colour for the areas beyond the alpha markers. 
-    these get overwritten (erased) by the curve 
+    Called from >C. 
+    Creates two rectangles of colour for the areas beyond the alpha markers. 
+    These get overwritten (erased) by the curve. 
     */
     draw_outside_area()
     {
@@ -162,8 +167,9 @@ class curve {
     }
     
     /* >G
-    called from >C.  creates one rectangle of colour for the area between the alpha markers. 
-    this get overwritten (erased) by the curve
+    Called from >C.  
+    Creates one rectangle of colour for the area between the alpha markers. 
+    This get overwritten (erased) by the curve
     */
     draw_inside_area()
     {
@@ -173,7 +179,7 @@ class curve {
     }
     
     /* >H
-    Draws the x-axis. called from >C
+    Draws the x-axis. Called from >C
     */
     draw_xaxis()
     {
@@ -189,7 +195,7 @@ class curve {
     }
   
     /* >J
-    add labels for each stddev point. called from >C. 
+    Add labels for each stddev point. Called from >C. 
     */
     draw_x_labels()
     {
@@ -216,7 +222,7 @@ class curve {
     }
   
     /* >K
-    calculates the population within the alpha markers (used by curve2), called from >C
+    Calculates the population within the alpha markers (used by curve2). Called from >C
     */
     print_population_inside_markers()
     {
@@ -226,7 +232,7 @@ class curve {
     }
   
     /* >L
-    calculates and prints the populationn outside the markers, called from >C
+    Calculates and prints the populationn outside the markers. Called from >C
     */
     print_population_outside_markers()
     {
@@ -248,11 +254,12 @@ class curve {
     }
   
     /* >M
-    the value shown in the HTML window for StdDev is held as a text string.
-    event listener >T calls this function. and ondraw function >AC
-    this function converts the text string, sent from the HTML into a floating point 
-    number, calls update_std_vars() >N to update the StdDev variables and then call 
-    draw() >C to clean and re-draw the curve with the updated data.
+    Code for updating the stddev. 
+    The value shown in the HTML window for stddev is held as a text string. 
+    The event listener >T calls the below function, and ondraw function >AC. 
+    This function converts the text string, sent from the HTML into a floating point number. 
+    Calls update_std_vars() >N to update the stddev variables.
+    Then call draw() >C to clean and re-draw the curve with the updated data. 
     */
     update_stdval(val) 
     {
@@ -266,8 +273,9 @@ class curve {
     }
   
     /* >N
-    called from >M above, update_std_vars() updates the variables associated with the stdDEv 
-    of the curve. Had to strech xMIn and xMax to 10* stdev to allow the second curver to be 
+    This updates all the variables that are assocaited with the stddev of the curve. 
+    Called from >M above.
+    Had to strech xMin and xMax to 10* stdev to allow the second curve to be 
     moved and still drawn correctly. 
     */
     update_std_vars() 
@@ -279,9 +287,10 @@ class curve {
     }
   
     /* >P
-    called by the event listener >U, >AC and >A
-    convert the HTML text string for Alpha into floating point number and
-    update the variables used in alpha calculation. 
+    This is the code for the alpha values. 
+    It is called by the event listener >U, >AC and >A.
+    Similarly to stddev it converts the HTML text string for alpha into a floating point number. 
+    It updates the variables used in alpha calculation. 
     */
     update_alpha(val) 
     {
@@ -294,8 +303,9 @@ class curve {
     }
   
     /* >Q
-    called by >P to convert the alpha value into the position along the stdDev line.
-    called by >T after the Stddev is updated.
+    Visualisation of alpha. 
+    This is called by >P to convert the alpha value into the position along the stdDev line.
+    This is called by >T after the stddev is updated.
     */
     calc_x_alpha()
     {
@@ -303,7 +313,7 @@ class curve {
     }
   
     /* >R
-    called by the mouse event listener >AB to calc the change in mane as a result of 
+    Called by the mouse event listener >AB to calculate the change in mean as a result of 
     the curve being moved left or right.
     */
     MoveHorizontal(xval){
@@ -311,8 +321,17 @@ class curve {
       {
         this.mean = this.mean + (xval* 0.01);
       }
-    }  
+    }
     
+    /* >S
+    Displays the mean value in the HTML window.
+    */
+    display_mean() {
+        this.ctx.fillStyle = "black";
+        this.ctx.font = "12px Arial";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText("Mean = " + this.mean.toFixed(2), this.xMidpoint, this.yOffset - 10);
+    }   
   }  // end of curve class
   
   
@@ -320,8 +339,8 @@ class curve {
   // link to the HTML canvas
   const canvas1 = document.getElementById("canvas1");
   
-  /* >S
-  create the two curves, curve1 and curve2.
+  /* >T
+  Creates the two curves, curve1 and curve2.
   curve1 is the top half of the canvas, curve2 is the bottom half.
   */
   ctx = canvas1.getContext("2d");
@@ -331,10 +350,11 @@ class curve {
   const curve1 = new curve(canvas1, 0, w, h, h, true); //top half of canvas
   const curve2 = new curve(canvas1, 0, w, (2*h), h, false); // bottom half of canvas
   
-  /* the next 3 sections add event_listeners to the buttons /input fields in the HTML code.
+  /* 
+  The next 3 sections add event_listeners to the buttons /input fields in the HTML code.
   For each event_listener, functions are called within each of the curve1 and curve2 objects. 
   */
-  /* >T
+  /* >U
   listener 1: pass the HTML stdval_slider text to the curve update_stdval function. 
   */
   document.getElementById("stddev_slider").addEventListener("change", function() {
@@ -346,7 +366,7 @@ class curve {
     curve2.draw();
   });
   
-  /* >U
+  /* >V
   listener 2: pass the HTML alpha_value text to the update_alpha function of both classes
   then make the alpha lines visible 
   */
@@ -356,8 +376,8 @@ class curve {
     curve1.draw();
     curve2.draw();  
   });
-  
-  /* >V
+ 
+  /* >W
   listeners to show/hide the areas underneath the curves
   */
   document.getElementById("vis_inside").addEventListener("change", function() {
@@ -369,9 +389,7 @@ class curve {
     curve2.draw();
   });
   
-  /* >W
-  listener to show/hide the areas underneath the curves
-  */
+  /* CURVE 1 */
   document.getElementById("vis_outside").addEventListener("change", function() {
     curve1.vis_outside=false;
     if (this.checked)
@@ -381,9 +399,7 @@ class curve {
     curve1.draw();
   });
   
-  /* >X
-  listener to show/hide the areas underneath the curves
-  */
+  /* CURVE 2 */
   document.getElementById("vis_power").addEventListener("change", function() {
     curve2.vis_outside=false;
     if (this.checked)
