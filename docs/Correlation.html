@@ -1,0 +1,83 @@
+<!DOCTYPE HTML >
+<html lang="en">
+<head>
+<script type="text/javascript">var usingExCanvas = false; </script>
+<script src="Correlation.js"></script>
+<title>Guess the Correlation Applet</title>
+</head>
+<body onload="pageSetup()">
+<header>
+<h2 id="appletTitle" ></h2>
+</header>
+<div role="main" aria-label="Guess the Correlation">
+<table role="presentation" border="0" cellpadding="5">
+	<tr>
+		<!-- column 1 -->
+		<td valign="top">
+			<table role="presentation" border="0">
+			
+					<tr id="numpointsrow">
+						<td id="numPoints" align="right">
+							<span id="numpts"> Number of points:</span>
+						</td>
+						<td>
+							<input id="inputNumPoints" size="3" type="text" value="5" tabindex="1" aria-labelledby="numpts"/>
+						</td>
+					</tr>
+					<tr>
+						<td align="center" colspan="2">
+							<button onclick="drawSample()" type="button" tabindex="1">New Sample</button>
+						</td>
+					</tr>
+					<tr>
+					<td colspan="2">
+									<input value="FALSE" id="pasteData" onclick="changePasteData()" type="checkbox" tabindex="1" >Edit/Paste Data
+								<hr></td>
+					</tr>
+					<tr>
+						<td colspan="2"> <textarea style="overflow:auto; font-family: monospace" id="dataText" rows="10" cols="20" ></textarea> </td>
+					</tr>
+							<tr>
+								<td colspan="2" id="useDataBoxes"> 
+									<button id="btnUseData" onclick="useData()" type="button" tabindex="1">Use Data</button> 
+									<button id="btnClearData" onclick="clearData()" type="button" tabindex="1">Clear</button>
+								<hr></td>
+							</tr>
+					<form  onsubmit="return checkGuessSubmit();">
+					<tr id="guessRow">
+						<td id="guessCorrLabel" align="right">
+							<span id="Corrguess"> Correlation guess:</span>
+						</td>
+						<td>
+							<input id="inputGuessCorr" size="3" type="text" value="0" tabindex="1" aria-labelledby="Corrguess" />
+						</td>
+					</tr>
+					</form>
+					<tr>
+						<td align="center" colspan="2">
+							<button onclick="checkGuess()" type="button" tabindex="1">Check Guess</button>
+						</td>
+					</tr>
+					<tr>
+						<td align="center" id="revealCorr" style="display: none;">
+						</td>
+				<tr>
+					<td colspan=2 align="right">
+						<hr role="presentation"/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2 align="center">
+						<button onclick="reset()" type="button" tabindex="1">Reset</button>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td valign = "top">
+			<canvas id="dataPlot" width="250" height="250" role="img" aria-label="Generated scatterplot" ></canvas>
+		</td>
+		</tr>
+	</tr>
+</table>
+</body>
+</html>
