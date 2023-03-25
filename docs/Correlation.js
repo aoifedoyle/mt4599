@@ -52,7 +52,6 @@ function bc$(id) {
   return document.getElementById(id);
 }
 
-
 // Initialize page.
 function pageSetup() {
 	bc$("appletTitle").innerHTML = "Guess the Correlation";
@@ -77,7 +76,6 @@ function plotSetup(plot) {
 var canvas = bc$(plot.canvasName);  
 var ctx = canvas.getContext("2d");  
 ctx.font = "9pt verdana";
-
 	// Set chart width and height, based on html canvas definition.
 	plot.canvasWidth = canvas.width;
 	plot.canvasHeight = canvas.height;
@@ -92,7 +90,6 @@ ctx.font = "9pt verdana";
 	writeYAxisTitle(plot, ctx);
 	writeXAxisLabels(plot, ctx);
 	writeYAxisLabels(plot, ctx);
-
 }
 function plotSetupY1Y2(plot, y1, y2) {
 var canvas = bc$(plot.canvasName);  
@@ -117,17 +114,11 @@ var ctx = canvas.getContext("2d");
 }
 
 // Convert chart Y values (0 is at bottom) to canvas Y values (0 is at top).
-// Leave space at bottom for x-axis border.
-// Start by subtracting off minY, to make relative. Then multiply by chartToCanvasScaleY.
-// Subtract from canvas height, and leave space for x-axis border.
 function toCanvasY(plot, chartY) {
 	return (plot.canvasHeight - (chartY-plot.minY) * plot.chartToCanvasScaleY - plot.xBorderWidth);
 }
 
 // Convert canvas Y values (0 is at top) to chart Y values.
-// Handle space at bottom for x-axis border.
-// canvasY = canvasHeight - (chartY-minY) * chartToCanvasScaleY - xBorderWidth
-// so chartY = (canvasHeight - canvasY - xBorderWidth) / chartToCanvasScaleY + minY;
 function toChartY(plot, canvasY) {
 	if (plot.chartToCanvasScaleY > 0) {
 		return ((plot.canvasHeight - canvasY - plot.xBorderWidth) / plot.chartToCanvasScaleY + plot.minY);
@@ -137,15 +128,11 @@ function toChartY(plot, canvasY) {
 }
 
 // Convert chart X values to canvas X values (add on y-axis border width).
-// Start by subtracting off minX, to make relative. Then multiply by chartToCanvasScaleX.
-// Finally, add on border width to leave space for y-axis border.
 function toCanvasX(plot, chartX) {
 	return ((chartX-plot.minX) * plot.chartToCanvasScaleX + plot.yBorderWidth);
 }
 
 // Convert canvas X values to chart X values.
-// canvasX = (chartX-minX) * chartToCanvasScaleX + yBorderWidth
-// so chartX = (canvasX - yBorderWidth) / chartToCanvasScaleX + minX;
 function toChartX(plot, canvasX) {
 	if (plot.chartToCanvasScaleX > 0) {
 		return ((canvasX - plot.yBorderWidth) / plot.chartToCanvasScaleX + plot.minX);
@@ -186,8 +173,6 @@ function setPlotScale(plot) {
 
 function drawAxes(plot, ctx) {
 	// Draw x-axis and y-axis
-	// Note that it is important to use beginPath() and closePath(), otherwise later changes to strokeStyle
-	// (e.g. color changes) will apply to axis lines!
 	ctx.strokeStyle = "black"; 
 	ctx.beginPath();
 	ctx.moveTo(toCanvasX(plot, plot.minX),toCanvasY(plot, plot.minY));
@@ -226,7 +211,6 @@ function writeXAxisLabels(plot, ctx) {
 var labelNum;
 var betweenLabels;
 var x;
-
 	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
 	// Get x-axis labels.
@@ -292,16 +276,12 @@ var yLabelDecimals = 1;
 
 function stdPlotYLabelFct(plot, y, yLabelDecimals) {
 	var yLabelText = y.toFixed(yLabelDecimals).replace(".000000000".substring(0,yLabelDecimals+1),"");
-	// Scale by plot.chartToCanvasScaleY to convert (y - plot.minY) to canvas Y.
-	// We have to subtract off plot.minY because our translated/rotated canvas has (0,0) as the left edge of the bottom y-axis label.
-	// So if y is plot.minY, then we want canvasY to be zero.
 	var canvasY = (y - plot.minY) * plot.chartToCanvasScaleY; 
 	return {
 		yLabelText: yLabelText,
 		canvasY: canvasY
 	}
 }
-
 
 function getBetweenLabels(min, max, labelCount) {
 	// Compute exact y between labels.
@@ -379,25 +359,6 @@ var ctx = canvas.getContext("2d");
 	writeXAxisLabels(plot, ctx);
 	writeYAxisLabels(plot, ctx);
 }
-// Clear the demoPlot and redraw axes
-
-function resetTrialPlot(plot, min, max) {
-var canvas = bc$(plot.canvasName);  
-var ctx = canvas.getContext("2d");  
-
-	// clear the entire canvas.
-	 ctx.clearRect(0, 0, canvas.width, canvas.height);
-	 // setup the plot
-	plot.minX = min;
-	plot.maxX = max;
-	setPlotScale(plot);
-	drawAxes(plot, ctx);
-	writeTopTitle(plot, ctx);
-	writeXAxisTitle(plot, ctx);
-	writeYAxisTitle(plot, ctx);
-	writeXAxisLabels(plot, ctx);
-	writeYAxisLabels(plot, ctx);
-}
 
 // Write top title (if any)
 function writeTopTitle(plot, ctx) {
@@ -411,7 +372,6 @@ var prettyYOffset = 10; // Shift text down a bit to get it fully onto canvas.
 function addPoint(plot, xval, yval) {
 var canvas = bc$(plot.canvasName);  
 var ctx = canvas.getContext("2d");
-
 	ctx.strokeStyle = "blue";
 	ctx.lineWidth = 1;
 	ctx.beginPath();
@@ -423,17 +383,16 @@ var ctx = canvas.getContext("2d");
 // Pull inputs into global variables, validate.
 // Return true if ok, false otherwise.
 function getInputs() {
-
 var x = 10;
 var y = 10;
 	// All inputs look ok, assign to global vars
 	inputX = x;
 	inputY = y;
-changePasteData();
+seeData();
 	return true;
 }
 
-function changePasteData() {
+function seeData() {
 	if (bc$("pasteData").checked) {
 		bc$("dataText").style.display="";
 		bc$("useDataBoxes").style.display="";
@@ -475,7 +434,6 @@ function readData() {
 	numObs = 0;
 	sampleX = new Array();
 	sampleY = new Array();
-	resetTrialPlot(dataPlot, 0, 100);
 	
 	var startIndex = 0;
 	
@@ -509,7 +467,7 @@ function readData() {
 	corrArray[corrIndex] = getNewCorr.correlation;
 	
 	// clear the entire canvas.
-	ctx = dataPlot.getContext("2d")
+	 ctx = dataPlot.getContext("2d")
 	 ctx.clearRect(0, 0, dataPlot.width, dataPlot.height);
 	
 	setPlotMinMax2(dataPlot, Math.min.apply(null,sampleX), Math.max.apply(null,sampleX), Math.min.apply(null,sampleY), Math.max.apply(null,sampleY));
@@ -588,7 +546,7 @@ function drawSample(){
 		bc$("revealCorr").innerHTML = "&nbsp;";
 		bc$("inputGuessCorr").value= 0;
 		createSample();
-		changePasteData();
+		seeData();
 }
 
 function addLine(plot, x1, y1, x2, y2){
@@ -602,7 +560,6 @@ var ctx = canvas.getContext("2d");
 	ctx.lineTo(toCanvasX(plot, x2),toCanvasY(plot, y2));
 	ctx.stroke();
 	ctx.closePath();
-
 }
 
 function checkGuessSubmit(){
@@ -618,23 +575,7 @@ function checkGuess(){
 	}
 	bc$("revealCorr").style.display="";
 	bc$("revealCorr").innerHTML = "<font color=#DB0000> <i>r</i> = " + corrArray[corrIndex].toFixed(3);
-	addPoint(guessActualPlot, corrArray[corrIndex], corrGuessArray[corrIndex]);
-	addLine(guessActualPlot, -1, -1, 1, 1);
-	addLine(errorActualPlot, -1, 0, 1, 0);
-	addLine(errorTrialPlot, 0, 0, Math.max(corrIndex, 10), 0);
-	errorArray[corrIndex] = corrGuessArray[corrIndex]-corrArray[corrIndex];
-
-	addPoint(errorActualPlot, corrArray[corrIndex], errorArray[corrIndex]);
-	addPoint(errorTrialPlot,  corrIndex, errorArray[corrIndex]);
-	if (corrIndex > 10) {
-		resetTrialPlot(errorTrialPlot, 0, corrIndex+1);
-
-		plotSetup(errorTrialPlot);
-		for (i=0; i <= corrIndex; i++) {
-			addPoint(errorTrialPlot, i, errorArray[i]);
-		}
-	}
-}
+};
 
 function calcCorr(x, y){
 var sumX = 0;
@@ -708,36 +649,7 @@ function reset() {
 	if (!getInputs()) {
 		return;
 	}
-	// Reset demoPlot and redraw it.
-	resetTrialPlot(dataPlot, 0, 100);
-	bc$("revealCorr").style.display="none";
-	bc$("inputGuessCorr").value= 0;
-	bc$("guessActualCorr").innerHTML = "";
-	corrIndex = 0;	
-	corrArray = new Array;
-	corrGuessArray = new Array;
-};
-
-function about() {
-	showAlert(about);
-};
-function changeNotes(){
-	showNotes = !showNotes;
-	if (showNotes){
-		bc$("UserNotes").value = "Hide Notes"; //change button text
-		bc$("UserNotesText").style.display="";
-		}
-		else {
-			bc$("UserNotes").value = "Show Notes";
-			bc$("UserNotesText").style.display="none";
-		}
-var notesbody = "<ul style='margin: 0px; padding: 1px'><li>Press New Sample to generate observations; enter your guess of the correlation coefficient and then press Check Guess</li><li>Check Track Performance to display statistics on your guesses</li></ul>";
-bc$("UserNotesText").innerHTML = notesbody;
-
 }
 
-
-
 // Load data into the applet for each question. 
-// Instead of using random have a set of data for each question. 
-
+// Instead of using random have a set of data for each question.
