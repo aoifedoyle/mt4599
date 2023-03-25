@@ -105,7 +105,7 @@ class curve {
       //multiplier is also yMax when x = the mean value; 
       let mult = 1 / (this.stddev * Math.sqrt(2 * Math.PI));
       // scale the curve to always fit within the canv height
-      this.yScale = (this.canv_height - this.yBorder -1) / mult;
+      this.yScale = (this.canv_height - this.yBorder - 2) / mult;
       let stddev_squared = this.stddev * this.stddev; //calc once rather than for every point
       this.ctx.strokeStyle = "black";
       this.ctx.lineWidth = 2;
@@ -113,7 +113,7 @@ class curve {
       this.ctx.fillStyle = "white";
       this.ctx.beginPath();
       this.ctx.moveTo(this.canv_width,this.yOffset);  //start at bottom right
-      for (let x=this.xMax; x >= this.xMin; x-=this.step) 
+      for (let x=this.xMidpoint; x >= -this.xMidpoint; x-=this.step) 
       {
         //draw the points in a clockwise direction, ie from bottom right, to bottom left 
         let y = this.yScale * mult * Math.exp(-0.5 * (x - this.mean ) * (x - this.mean) / stddev_squared);
@@ -274,13 +274,11 @@ class curve {
     /* >N
     This updates all the variables that are assocaited with the stddev of the curve. 
     Called from >M above.
-    Had to strech xMin and xMax to 10* stdev to allow the second curve to be 
-    moved and still drawn correctly. 
     */
     update_std_vars() 
     {
-      this.xMin = this.mean - (10 * this.stddev);
-      this.xMax = this.mean + (10 * this.stddev);
+      this.xMin = this.mean - this.stddev);
+      this.xMax = this.mean + this.stddev);
       this.step = (this.xMax - this.xMin)/this.canv_width;
       this.step = 10/ this.canv_width;
     }
@@ -363,6 +361,16 @@ class curve {
   listener 1: pass the HTML stdval_slider text to the curve update_stdval function. 
   */
   document.getElementById("stddev_slider").addEventListener("change", function() {
+      if (this.value < document.getElementById("stddev_slider").min ) 
+      {
+        this.value= document.getElementById("stddev_slider").min;
+        document.getElementById("stddev_slider").value=this.value;
+      }
+      else if (this.value > document.getElementById("stddev_slider").max ) 
+      {
+        this.value= document.getElementById("stddev_slider").max;
+        document.getElementById("stddev_slider").value=this.value;
+      }
     curve1.update_stdval(this.value); 
     curve2.update_stdval(this.value); 
     curve1.calc_x_alpha(); 
@@ -376,6 +384,16 @@ class curve {
   then make the alpha lines visible 
   */
   document.getElementById("alpha_value").addEventListener("change", function() {
+      if (this.value < document.getElementById("alpha_value").min ) 
+      {
+        this.value= document.getElementById("alpha_value").min;
+        document.getElementById("alpha_value").value=this.value;
+      }
+      else if (this.value > document.getElementById("alpha_value").max ) 
+      {
+        this.value= document.getElementById("alpha_value").max;
+        document.getElementById("alpha_value").value=this.value;
+      }
     curve1.update_alpha(this.value); 
     curve2.update_alpha(this.value); 
     curve1.draw();
