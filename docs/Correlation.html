@@ -1,16 +1,12 @@
 <!DOCTYPE HTML >
 <html lang="en">
 <head>
-<script type="text/javascript">var usingExCanvas = false; </script>
-<script src="Correlation.js"></script>
-<title>Guess the Correlation Applet</title>
+    <script src="Correlation.js"></script>
+    <title>Guess the Correlation Applet</title>
 </head>
 <body onload="pageSetup()">
-<header>
-<h2 id="appletTitle" ></h2>
-</header>
-<div role="main" aria-label="Guess the Correlation">
-<table role="presentation" border="0" cellpadding="5">
+    <h2 id="appletTitle" ></h2>
+    
 	<tr>
 		<!-- column 1 -->
 		<td valign="top">
@@ -31,7 +27,7 @@
 					</tr>
 					<tr>
 					<td colspan="2">
-									<input value="FALSE" id="pasteData" onclick="changePasteData()" type="checkbox" tabindex="1" >Edit/Paste Data
+									<input value="FALSE" id="pasteData" onclick="seeData()" type="checkbox" tabindex="1" >See data
 								<hr></td>
 					</tr>
 					<tr>
