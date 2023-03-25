@@ -45,6 +45,8 @@ class curve {
         this.ctx.font = "12px Arial";
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "top";
+        //Initialise curveNumber to null
+        this.curveNumber = null;
     }
     
     /* >B
@@ -215,9 +217,6 @@ class curve {
           this.ctx.moveTo(p, this.yOffset - 4);
           this.ctx.lineTo(p, this.yOffset + 4);
           this.ctx.stroke();
-          //print stddev value
-          this.ctx.fillText(x.toFixed(2), p, this.yOffset + 4 );
-          this.ctx.fillText('standard deviations', this.xMidpoint, this.yOffset + 15 );
       }
     }
   
@@ -330,9 +329,13 @@ class curve {
         this.ctx.fillStyle = "black";
         this.ctx.font = "12px Arial";
         this.ctx.textAlign = "center";
-        this.ctx.fillText("Mean = " + this.mean.toFixed(2), this.xMidpoint, this.yOffset - 10);
-    }   
-  }  // end of curve class
+        if (this.curveNumber === 1) {
+            this.ctx.fillText("Mean = " + this.mean.toFixed(2), this.xMidpoint, this.yOffset - 10);
+        } else if (this.curveNumber === 2) {
+        this.ctx.fillText("Difference in means = " + this.mean.toFixed(2), this.xMidpoint, this.yOffset - 10);
+    }
+  }  
+} // end of curve class
   
   
   // Start of non-class code
@@ -348,7 +351,9 @@ class curve {
   let w = canvas1.width;
   // call the constructor of each curve passing (canv, canvas_left, canv_width, canvas_bottom, canv_height, visible)
   const curve1 = new curve(canvas1, 0, w, h, h, true); //top half of canvas
+  curve1.curveNumber = 1;
   const curve2 = new curve(canvas1, 0, w, (2*h), h, false); // bottom half of canvas
+  curve2.curveNumber = 2;
   
   /* 
   The next 3 sections add event_listeners to the buttons /input fields in the HTML code.
@@ -425,6 +430,17 @@ class curve {
     }
     curve2.draw();
   });
+
+  /* >YY
+  listener to change mean
+  const muInput = document.getElementById("muInput");
+
+  muInput.addEventListener("input", () => {
+  const newMu = parseFloat(muInput.value);
+  curve1.mean = newMu;
+  curve1.display_mean();
+ });
+ */
   
   /*  
   three listners for the mouse left button down, left button up, and 
