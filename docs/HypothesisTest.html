@@ -4,7 +4,8 @@
     <p>Hypothesis Testing using a Normal distribution of samples against a range of hyptohesis limits </p>
     <fieldset>
       <legend>Normal distribution for Null hypothesis</legend>
-      <label>Standard deviation (range 0.1 ~ 2): </label><input id="stddev_slider" type="number" min="0.1" max="2.0" step="0.1" value="1"><br>
+      <label>Mean (range 1 ~ 50):</label><input id="muInput" type="number" min="1" max="50" step="1" value="15">
+      <label>  Standard deviation (range 0.1 ~ 2): </label><input id="stddev_slider" type="number" min="0.1" max="2.0" step="0.1" value="1"><br>
       <label>Type 1 error (alpha) (range 0.01 ~ 1):</label> <input id="alpha_value" type="number" min="0.01" max="1" step="0.01" value="0.05">
       <label>Show Type 1 error (reject a true claim):</label><input id="vis_outside" type="checkbox">
     </fieldset>
@@ -12,7 +13,7 @@
       <legend>Distribution for alternate hypothesis</legend>
       <label>Show alternate distribution:</label><input id="alt_dist" type="checkbox">
       <form id="f1">
-        <label>Show Type 2 error (fail to reject a false claim):</label><input id="vis_inside" type="checkbox">
+        <label>  Show Type 2 error (fail to reject a false claim):</label><input id="vis_inside" type="checkbox">
         <label></label>Power of the alternative hypothesis distribution:</label><input id="vis_power" type="checkbox"> <br>
         <p> The distribution for an alternate hypothesis can be moved sideways by holding down the left button of a mouse/trackpad </p>
       </form>
