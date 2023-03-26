@@ -34,6 +34,7 @@ class curve {
       this.x_alpha=0;
       this.stddev=1;
       this.mean =0;
+      this.mean_t=0;
       this.mouse_active = false;
       //Two class functions are called.
       this.update_std_vars();
@@ -310,11 +311,12 @@ class curve {
   /* >R
   Called by the mouse event listener >AB to calculate the change in mean as a result of 
   the curve being moved left or right.
+  The amount to move the mean of the curve is set here as 10 * step size
   */
   MoveHorizontal(xval){
     if (this.curve_visible == true) 
     {
-      this.mean = this.mean + (xval* 0.01);
+      this.mean = this.mean + (xval * this.step * 10);
     }
   }
   
@@ -328,11 +330,12 @@ class curve {
     this.ctx.textAlign = "center";
     if (this.curveNumber === 1) 
     {
-        this.ctx.fillText("Mean = " + this.mean.toFixed(2), this.xMidpoint, this.yOffset - 10);
+        this.ctx.fillText("Mean = " + this.mean_t.toFixed(2), this.xMidpoint, this.yOffset - 10);
     } 
     else if (this.curveNumber === 2) 
     {
-      this.ctx.fillText("Difference in means = " + this.mean.toFixed(2), this.xMidpoint, this.yOffset - 10);
+      let diff = this.mean / this.stddev;
+      this.ctx.fillText("Difference in means = " + diff.toFixed(2), this.xMidpoint, this.yOffset - 10);
     }
   }  
 } // end of curve class
@@ -362,16 +365,14 @@ For each event_listener, functions are called within each of the curve1 and curv
 /* >U
 listener 1: pass the HTML stdval_slider text to the curve update_stdval function. 
 */
-document.getElementById("stddev_slider").addEventListener("change", function() {
-  if (this.value < document.getElementById("stddev_slider").min ) 
+stddev_slider.addEventListener("change", function() {
+  if (this.value < this.min ) 
   {
-    this.value= document.getElementById("stddev_slider").min;
-    document.getElementById("stddev_slider").value=this.value;
+    this.value= this.min;
   }
-  else if (this.value > document.getElementById("stddev_slider").max ) 
+  else if (this.value > this.max ) 
   {
-    this.value= document.getElementById("stddev_slider").max;
-    document.getElementById("stddev_slider").value=this.value;
+    this.value= this.max;
   }
   curve1.update_stdval(this.value); 
   curve2.update_stdval(this.value); 
@@ -385,22 +386,39 @@ document.getElementById("stddev_slider").addEventListener("change", function() {
 listener 2: pass the HTML alpha_value text to the update_alpha function of both classes
 then make the alpha lines visible 
 */
-document.getElementById("alpha_value").addEventListener("change", function() {
-  if (this.value < document.getElementById("alpha_value").min ) 
+alpha_value.addEventListener("change", function() {
+  if (this.value < this.min ) 
   {
-    this.value= document.getElementById("alpha_value").min;
-    document.getElementById("alpha_value").value=this.value;
+    this.value= this.min;
   }
-  else if (this.value > document.getElementById("alpha_value").max ) 
+  else if (this.value > this.max ) 
   {
-    this.value= document.getElementById("alpha_value").max;
-    document.getElementById("alpha_value").value=this.value;
+    this.value= this.max;
   }
   curve1.update_alpha(this.value); 
   curve2.update_alpha(this.value); 
   curve1.draw();
   curve2.draw();  
 });
+
+
+/* >YY
+  listener to change mean
+  const muInput = document.getElementById("muInput");
+*/
+  muInput.addEventListener("change", function() {
+
+    if (this.value < this.min ) 
+    {
+      this.value= this.min;
+    }
+    else if (this.value > this.max ) 
+    {
+      this.value= this.max;
+    }
+  curve1.mean_t = parseFloat(this.value);
+  curve1.draw();
+ });
 
 /* >W
 listeners to show/hide the areas underneath the curves
@@ -481,13 +499,20 @@ based on mouseselected calls >L.
 canvas1.addEventListener("mousemove", (e) =>  {
   if (mouseselected == true) 
   {
-    curve2.MoveHorizontal(e.offsetX-startx);
-    startx = e.offsetX;
+  if (startx < e.offsetX)
+    {
+      curve2.MoveHorizontal(1);
+    }
+    else if (startx > e.offsetX)
+    {
+      curve2.MoveHorizontal(-1);
+    }
     let lower_cdf =curve2.calc_lower_cdf();
     let upper_cdf =curve2.calc_upper_cdf();
     let power = lower_cdf + (1 - upper_cdf);
     let T2 = upper_cdf - lower_cdf;
     curve2.draw();
+    startx = e.offsetX;
   }
 });
 
@@ -507,6 +532,7 @@ window.onload = function() {
   let std = document.getElementById("stddev_slider");
   curve1.update_stdval(std.value);
   let alpha = document.getElementById("alpha_value");
+  curve1.mean_t = parseFloat(muInput.value);
   curve1.update_alpha(alpha.value); 
   curve2.update_alpha(alpha.value); 
   curve1.draw(); 
