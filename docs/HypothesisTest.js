@@ -516,5 +516,3 @@ window.onload = function() {
     document.getElementById("f1").hidden = true;
   }
 }
-  
-  
