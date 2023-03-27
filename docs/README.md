@@ -6,4 +6,4 @@
 
 #### Hypothesis Testing Applet. [click here](HypothesisTest.html)
 
-#### Guess the Correlation Applet (Work in Progress). [click here](GuessTheCorrelation.html)
+#### Guess the Correlation Applet. [click here](Correlation.html)
