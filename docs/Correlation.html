@@ -6,39 +6,17 @@
 </head>
 <body onload="pageSetup()">
     <h2 id="appletTitle" ></h2>
-    
 	<tr>
-		<!-- column 1 -->
 		<td valign="top">
 			<table role="presentation" border="0">
-			
-					<tr id="numpointsrow">
-						<td id="numPoints" align="right">
-							<span id="numpts"> Number of points:</span>
-						</td>
-						<td>
-							<input id="inputNumPoints" size="3" type="text" value="5" tabindex="1" aria-labelledby="numpts"/>
-						</td>
+					<tr>
+							<button id="questionOne" onclick="createSample(0)" type="button" tabindex="1">Question One</button>
+							<button id="questionTwo"onclick="createSample(1)" type="button" tabindex="2">Question Two</button>
+							<button id="questionThree"onclick="createSample(2)" type="button" tabindex="3">Question Three</button>
 					</tr>
 					<tr>
-						<td align="center" colspan="2">
-							<button onclick="drawSample()" type="button" tabindex="1">New Sample</button>
-						</td>
+						<td colspan="2"> <textarea style="overflow:auto; font-family: monospace" id="dataText" rows="1" cols="1" ></textarea> </td>
 					</tr>
-					<tr>
-					<td colspan="2">
-									<input value="FALSE" id="pasteData" onclick="seeData()" type="checkbox" tabindex="1" >See data
-								<hr></td>
-					</tr>
-					<tr>
-						<td colspan="2"> <textarea style="overflow:auto; font-family: monospace" id="dataText" rows="10" cols="20" ></textarea> </td>
-					</tr>
-							<tr>
-								<td colspan="2" id="useDataBoxes"> 
-									<button id="btnUseData" onclick="useData()" type="button" tabindex="1">Use Data</button> 
-									<button id="btnClearData" onclick="clearData()" type="button" tabindex="1">Clear</button>
-								<hr></td>
-							</tr>
 					<form  onsubmit="return checkGuessSubmit();">
 					<tr id="guessRow">
 						<td id="guessCorrLabel" align="right">
@@ -57,14 +35,15 @@
 					<tr>
 						<td align="center" id="revealCorr" style="display: none;">
 						</td>
+					</tr>
+					<tr>
+						<td align="center" colspan="2">
+							<button onclick="clearData()" type="button" tabindex="1">Clear</button>
+						</td>
+					</tr>
 				<tr>
 					<td colspan=2 align="right">
 						<hr role="presentation"/>
-					</td>
-				</tr>
-				<tr>
-					<td colspan=2 align="center">
-						<button onclick="reset()" type="button" tabindex="1">Reset</button>
 					</td>
 				</tr>
 			</table>
