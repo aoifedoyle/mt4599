@@ -14,17 +14,29 @@ var sampleY = new Array();
 var varNames = ["x", "y"];
 var dataSets = [
 	{
+		x: [20, 40, 60, 80],
+		y: [20, 40, 60, 80]
+	}, 
+    {
+        x: [0, 24, 78, 15, 32, 55, 13, 40],
+        y: [12, 16, 22, 68, 15, 44, 24, 60]
+    },
+    {
 		x: [24, 23, 10, 36, 48, 33, 27],
 		y: [72, 65, 48, 82, 95, 60, 90]
 	}, 
 	{
-		x: [6, 7, 5, 8, 9, 6, 7], 
-		y: [4, 6, 8, 2, 4, 5, 1]
+		x: [20, 23, 30, 37, 35, 45, 55, 60, 63], 
+		y: [72, 71, 73, 74, 74, 73, 79, 75, 77]
 	}, 
 	{
 		x: [69.3, 87.7, 50.5, 51.9, 82.7, 70.5, 72.4, 91.7, 86.6, 79.4], 
 		y: [56, 89, 55, 72, 61, 66, 90, 93, 18, 84]
-	}
+	},
+    {
+		x: [72, 65, 48, 82, 95, 60, 90], 
+		y: [24, 23, 10, 36, 48, 33, 27]
+	}, 
 ];
 var currentDataSetIndex = 0;
 
@@ -71,6 +83,8 @@ function pageSetup() {
 	// Setup plots
 	plotSetup(dataPlot);
 	resetPlot(dataPlot);
+
+    updateDataText();
 }
 
 function onMouseDown(event) {
@@ -428,8 +442,22 @@ function clearData() {
 
 	//Clear the data text area
 	doc$("dataText").value = "";
+
+    // Clear the revealCorr display
+	doc$("revealCorr").style.display = "none";
+	doc$("revealCorr").innerHTML = "";
 }
 
+function updateDataText() {
+    // Convert the data in sampleX and sampleY into a string format
+    let dataString = '';
+    for (let i = 0; i < sampleX.length; i++) {
+      dataString += `(${sampleX[i]}, ${sampleY[i]})\n`;
+    }
+  
+    // Set the value of the dataText textarea
+    doc$("dataText").value = dataString;
+  }
 
 //generate the random bivariate observations and graph them
 function drawSample(){
