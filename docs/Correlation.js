@@ -13,30 +13,30 @@ var sampleX = new Array();
 var sampleY = new Array();
 var varNames = ["x", "y"];
 var dataSets = [
-	{
+	{   // example
 		x: [20, 40, 60, 80],
 		y: [20, 40, 60, 80]
 	}, 
-    {
-        x: [0, 24, 78, 15, 32, 55, 13, 40],
-        y: [12, 16, 22, 68, 15, 44, 24, 60]
-    },
-    {
+	{   // Question one
+		x: [ 0, 24, 78, 15, 32, 55, 13, 40],
+		y: [12, 16, 22, 68, 15, 44, 24, 60]
+	}, 
+	{	// Question two
 		x: [24, 23, 10, 36, 48, 33, 27],
 		y: [72, 65, 48, 82, 95, 60, 90]
 	}, 
-	{
+	{	//Question three
 		x: [20, 23, 30, 37, 35, 45, 55, 60, 63], 
 		y: [72, 71, 73, 74, 74, 73, 79, 75, 77]
 	}, 
-	{
+	{  //Question four
 		x: [69.3, 87.7, 50.5, 51.9, 82.7, 70.5, 72.4, 91.7, 86.6, 79.4], 
 		y: [56, 89, 55, 72, 61, 66, 90, 93, 18, 84]
 	},
-    {
-		x: [72, 65, 48, 82, 95, 60, 90], 
+	{   // Question five
+		x: [72, 65, 48, 82, 95, 60, 90],
 		y: [24, 23, 10, 36, 48, 33, 27]
-	}, 
+	}
 ];
 var currentDataSetIndex = 0;
 
@@ -83,8 +83,6 @@ function pageSetup() {
 	// Setup plots
 	plotSetup(dataPlot);
 	resetPlot(dataPlot);
-
-    updateDataText();
 }
 
 function onMouseDown(event) {
@@ -342,66 +340,6 @@ var ctx = canvas.getContext("2d");
 	ctx.closePath();
 }
 
-// Process data specified in dataText.
-function useData() {
-	readData();
-}
-
-function displaySampleData() {	
-	doc$("dataText").value = varNames[0] + "\t" + varNames[1] + "\n";	
-	for (k=0; k < numObs; k++){	
-			doc$("dataText").value += sampleX[k].toFixed(1) + "\t" + sampleY[k].toFixed(1) + "\n";
-	}
-	
-}
-// Read user-provided sample data into obsX and obsY;
-function readData() {
-	// Pre-defined x and y values 
-	var sampleX = [24, 23, 10, 36, 48, 33, 27];
-	var sampleY = [72, 65, 48, 82, 95, 60, 90];
-	// Set the number of observations 
-	numObs = sampleX.length;
-	// Get the input string from a DOM element with ID "dataText" amd stores in 'dataText' variable
-	var dataTextObj = doc$("dataText");
-	var dataText = dataTextObj.value;
-	// Split the input string into an array of rows (each row is a string) using newline characters as delimiters
-	var dataRows = dataText.split(/\n+/);
-
-	// initliase vairables for storing the number of observations, the x-axis values and the y-axis values 
-	var sampleX, sampleY;
-	numObs = 0;
-	sampleX = new Array();
-	sampleY = new Array();
-	
-	var startIndex = 0;
-	
-	varNames = dataRows[0].trim().split(/\s+/);
-	if (isNaN(parseFloat(varNames[0]))) { 
-		startIndex = 1;
-		dataPlot.xTitle = varNames[0];
-		dataPlot.yTitle = varNames[1];
-		}
-	
-	var getNewCorr = calcCorr(sampleX, sampleY);
-	corrArray[corrIndex] = getNewCorr.correlation;
-	
-	// clear the entire canvas.
-	 ctx = dataPlot.getContext("2d")
-	 ctx.clearRect(0, 0, dataPlot.width, dataPlot.height);
-	
-	setPlotMinMax2(dataPlot, Math.min.apply(null,sampleX), Math.max.apply(null,sampleX), Math.min.apply(null,sampleY), Math.max.apply(null,sampleY));
-	setPlotScale(dataPlot);
-	drawAxes(dataPlot, ctx);
-	writeTopTitle(dataPlot, ctx);
-	writeXAxisTitle(dataPlot, ctx);
-	writeYAxisTitle(dataPlot, ctx);
-	writeXAxisLabels(dataPlot, ctx);
-	writeYAxisLabels(dataPlot, ctx);
-		for (var i=0; i < numObs; i++) {
-						addPoint(dataPlot, sampleX[i],sampleY[i]);
-
-		}
-}
 
 function createSample(currentDataSetIndex) {
 	//Clear existing data
@@ -428,7 +366,7 @@ function createSample(currentDataSetIndex) {
 	//currentDataSetIndex = (currentDataSetIndex + 1) % dataSets.length;
 }
 
-// Clear dataText
+// Clear data
 function clearData() {
 	//Clear the data 
 	sampleX = [];
@@ -439,25 +377,9 @@ function clearData() {
 
 	//Reset the plot
 	resetPlot(dataPlot);
-
-	//Clear the data text area
-	doc$("dataText").value = "";
-
-    // Clear the revealCorr display
-	doc$("revealCorr").style.display = "none";
-	doc$("revealCorr").innerHTML = "";
+	doc$("revealCorr").innerHTML = "&nbsp;";
 }
 
-function updateDataText() {
-    // Convert the data in sampleX and sampleY into a string format
-    let dataString = '';
-    for (let i = 0; i < sampleX.length; i++) {
-      dataString += `(${sampleX[i]}, ${sampleY[i]})\n`;
-    }
-  
-    // Set the value of the dataText textarea
-    doc$("dataText").value = dataString;
-  }
 
 //generate the random bivariate observations and graph them
 function drawSample(){
