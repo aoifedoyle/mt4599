@@ -1,8 +1,5 @@
-
 /*
 The following is the base code for the Normal Distribution Applet. 
-The aim is to create classes like the HypothesisTesting Applet to make the code easier to read and maintain.
-The code is pretty much finished other than adding in comments and the classes.
 */
 var can;
 var ctx;
@@ -33,9 +30,8 @@ var probab = 0;
 var inputmean;
 var inputsd;
 
-var showcuml = false; //When true, show cumulative probabilities.
-var showFa = false; //show P(X<a)
-var showFb = false;
+var showFa = true; //show P(X<a)
+var showFb = true;
 	
 window.onload = function(){
 	can = document.getElementById("canvas");
@@ -51,7 +47,6 @@ window.onload = function(){
 		xvals[i] = i;
 		yvals[i] = jStat.normal.pdf(i,w/2,w/8);		
 	}	
-	cbvisibility("hidden");
 	paint();		
 }
 
@@ -79,12 +74,6 @@ function paint(){
 			ctx.fillText(txt, xorigin + i*unit - ctx.measureText(txt).width/2 , xorigin + h );
 		}
 	}	
-	if(showcuml == false) drawPartialCurve(ctx, xvals, yvals, ax - xorigin, bx-xorigin, true, "#00006699");
-	else{
-		if(showFb) drawPartialCurve(ctx, xvals, yvals, 0, bx-xorigin, true,  "#00006699");
-		if(showFa && showFb) drawPartialCurve(ctx, xvals, yvals, 0, ax-xorigin, true, "#006633");
-		else if(showFa) drawPartialCurve(ctx, xvals, yvals, 0, ax-xorigin, true, "#00c205");
-	}
 	
 	var axz = Math.round((ax-middle)/unit*100)/100; //zscore
 	var bxz = Math.round((bx-middle)/unit*100)/100; //zscore
@@ -95,8 +84,12 @@ function paint(){
 	
 	var axval = Math.round((eval(axz*sd)+eval(mean))*100)/100; //context a
 	var bxval = Math.round((eval(bxz*sd)+eval(mean))*100)/100;  //context b	
+
+	//area between phiA and phiB
+	ctx.fillStyle = "#00006699";
+	ctx.fillRect(ax, 0, bx-ax, xorigin+h-50);
 	
-	if(!showcuml || showFa){
+	if(showFa){
 		drawTri(ctx, ax,"#0099cc", 2*base, base);
 		txt = axval;
 		ctx.fillText(txt, ax - ctx.measureText(txt).width/2, h+xorigin-15);
@@ -105,7 +98,7 @@ function paint(){
 		txt="a";
 		ctx.fillText(txt, ax - ctx.measureText(txt).width/2, h+xorigin-33);
 	}
-	if(!showcuml || showFb){
+	if(showFb){
 		ctx.font="16px Arial";
 		drawTri(ctx, bx,"#0099cc", 2*base,base);
 		txt = bxval;
@@ -127,31 +120,8 @@ function paint(){
 	document.getElementById("problabel2").style.visibility = "hidden";
 	document.getElementById("stdnlabel").style.visibility = "hidden";		
 			
-	if(showcuml){
-		if(showFa && showFb){
-			txt = "P(" + axval + " <  X < " + bxval + ") = P(X < " + bxval + ") -  P(X < " + axval + ")";  
-			document.getElementById("problabel1").innerHTML = txt;	
-			txt = " = " + probb + " - " +proba + " = " + probab;
-			document.getElementById("problabel2").innerHTML = txt;
-			document.getElementById("problabel2").style.visibility = "visible";
-		}
-		else if(showFa){
-			txt = "P(" +  "X < " + axval + ") " + " = " + proba; 
-			document.getElementById("problabel1").innerHTML = txt;				
-		}
-		else if(showFb){
-			txt = "P(" +  "X < " + bxval + ") " + " = " + probb; 
-			document.getElementById("problabel1").innerHTML = txt;
-		}
-		else{
-			document.getElementById("problabel1").style.visibility = "hidden";	
-		}
-	}
-	else{
-		txt = "P(" + axval + " <  X < " + bxval + ") = " + probab;
-		document.getElementById("problabel1").innerHTML = txt;			
-	}
-	
+	txt = "P(" + axval + " <  X < " + bxval + ") = " + probab;
+	document.getElementById("problabel1").innerHTML = txt;			
 	
 	if(showz){
 		txt = "P(" + axz + " <  Z < " + bxz + ") = " + probab;
@@ -179,24 +149,6 @@ function showZ(){
 	paint();
 }
 
-function showCuml(){
-	if(showcuml){
-		showcuml = false;
-		cbvisibility("hidden");
-	}
-	else{
-		showcuml = true;
-		cbvisibility("visible");
-	}
-	paint();
-}
-
-function cbvisibility(state){
-		document.getElementById("myshowa").style.visibility = state;
-		document.getElementById("myshowb").style.visibility = state;
-		document.getElementById("labela").style.visibility = state;
-		document.getElementById("labelb").style.visibility = state;
-}
 
 function showA(){
 	if(showFa) showFa = false;
@@ -224,37 +176,31 @@ function setSD() {
   paint();
 }
 
-function drawPartialCurve(context, xvals, yvals, startx, endx, fill, col){	
-	context.beginPath();
-	context.moveTo(xorigin + xvals[startx], baseline);
-	context.lineTo(xorigin + xvals[startx],xorigin + h - 50 -yvals[startx]/yvals[middle]*350);
-	for(var i = startx; i < endx; i++){
-		context.lineTo(xorigin + xvals[i],xorigin + h-50-yvals[i]/yvals[middle]*350);
-	}
-	context.lineTo(xorigin + xvals[endx], baseline);
-	context.moveTo(xorigin + xvals[endx], baseline);
-	context.closePath();
-	context.fillStyle=col;
-	if(fill == true) context.fill();
-	else context.stroke();
-}
 
 function drawCurve(context, xvals, yvals, fill){
-	context.beginPath();
-	context.moveTo(xorigin + xvals[0],xorigin + h - 50 -yvals[0]/yvals[middle]*350);
-	for(var i = 1; i < w; i++){
+    context.strokeStyle = "black";
+    context.lineWidth = 2;
+    context.setLineDash([]);
+    context.fillStyle = "white";
+    context.beginPath();
+
+	context.moveTo(w + 2*xorigin , xorigin + h-50); //bottom right
+	for(var i = w; i >= 0; i--){
 		context.lineTo(xorigin + xvals[i],xorigin + h-50-yvals[i]/yvals[middle]*350);
 	}
-	context.closePath();
-	if(fill == true) context.fill();
-	else context.stroke();
+    context.stroke();  //draw the curve
+    context.lineTo(xorigin, 0); //top left
+    context.lineTo(can.width,0); //top right
+	context.moveTo(w + 2*xorigin , xorigin + h-50); //bottom right
+    context.fill();
+    context.closePath();
+    context.fillStyle = "#000000"; // default back to none
 }
 
 function mouse_down(e){
 	var rect = can.getBoundingClientRect();
 	var x = e.clientX - rect.left;
 	var y = e.clientY - rect.top;	
-	
 	
 	if (x < ax + base  && x > ax - base  && y < baseline + 2*base &&  y > baseline - base ){
 		dragok = true;
@@ -279,8 +225,7 @@ function mouse_move(e){
 	var x = e.clientX - rect.left;
 	var y = e.clientY - rect.top;	
 
-		//document.getElementById("testlabel").innerHTML="mouse move, dragok: " + dragok + ", dragp: " + dragp;
-	if (dragok && dragp == 0 && x < bx) ax = x;
+	if (dragok && dragp == 0 && x < bx && x > xorigin) ax = x;
 	else if (dragok && dragp == 1 && x > ax) bx = x;
 		
 	paint();
